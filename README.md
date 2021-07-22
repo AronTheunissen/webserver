@@ -1,5 +1,16 @@
 This assignment will focus on creating your own web server from scratch. During the introductory weeks you have made programs that handle user input from the command line. Conceptually, a web server isn't all that much different. In a web server, the user doesn't interact with your application directly. Instead, the user input will reach your application via the internet. For you as a programmer, that will mean that you won't use `System.in` as input, but a so-called socket. Using low-level primitives like this, we will build our own web server framework.
 
+This skeleton project has been set-up using Gradle. As a reminder:
+
+```bash
+# Building
+./gradlew build
+# Testing (will fail with the initial code)
+./gradlew test
+# Running
+./gradlew run
+```
+
 ## Step 1: listening loop
 
 This will focus on the general concepts of a web server. In this repository, we have created a simple stub. The code is documented rather thoroughly, which should aid you in understanding what the role of every cog in the machinery is. Roughly, the basic premise is:

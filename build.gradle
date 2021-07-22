@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    // This time we're building a command-line executable application.
+    id 'application'
+}
+
+repositories {
+    // Specify the repository mirror that we want to download our dependencies from. JCentral is configured by default when creating a new Gradle project.
+    jcenter()
+}
+
+dependencies {
+    // Download JUnit so that we can use it in our tests.
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.2'
+}
+
+application {
+    // Define the main class for the application.
+    mainClassName = 'nl.sogyo.webserver.ConnectionHandler'
+}
+
+test {
+    // For running our tests, use the test runner provided by JUnit.
+    useJUnitPlatform()
+}
