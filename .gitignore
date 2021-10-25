@@ -87,3 +87,6 @@ local.properties
 
 ### Maven template
 target/
+
+# Ignore Gradle project-specific cache directory
+.gradle
