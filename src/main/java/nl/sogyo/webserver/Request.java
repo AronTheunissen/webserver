@@ -19,7 +19,7 @@ public interface Request {
     List<String> getHeaderParameterNames();
 
     /// Retrieves the supplied header parameter value
-    /// correspronding to the name. If no header exists
+    /// corresponding to the name. If no header exists
     /// with the name, it returns null.
     String getHeaderParameterValue(String name);
 
@@ -27,7 +27,7 @@ public interface Request {
     /// the requested URL.
     List<String> getParameterNames();
 
-    /// Retreives the URL parameter value corresponding to
+    /// Retrieves the URL parameter value corresponding to
     /// the name. If no parameter exists with the name,
     /// it returns null.
     String getParameterValue(String name);

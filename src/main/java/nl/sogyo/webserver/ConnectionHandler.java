@@ -20,19 +20,24 @@ public class ConnectionHandler implements Runnable {
             // Set up a reader that can conveniently read our incoming bytes as lines of text.
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             String line = null;
+            StringBuilder requestString = new StringBuilder();
             do {
-                // Read the incoming message line by line and echo is to the system out.
+                // Read the incoming message line by line and echo it to the system out.
                 line = reader.readLine();
-                System.out.println(line);
+                requestString.append(line).append(System.getProperty("line.separator"));
             } while (!line.isEmpty());
+
+
+            ResponseWriter response = getResponseWriter(reader, new RequestParse(requestString.toString()));
             
             // Set up a writer that can write text to our binary output stream.
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
             // Write a simple hello world textual response to the client.
-            writer.write("Thank you for connecting!\r\n");
+
+            writer.write(getResponseString(response));
             writer.flush();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             // After handling the request, we can close our socket.
@@ -43,6 +48,36 @@ public class ConnectionHandler implements Runnable {
             }
         }
     }
+
+    private ResponseWriter getResponseWriter(BufferedReader reader, RequestParse request) throws IOException {
+        System.out.println("The test sentence is" + request.getHeaderParameterNames().contains("Content-Length"));
+        if (request.getHeaderParameterNames().contains("Content-Length")) {
+            char bodyChar;
+            StringBuilder bodyString = new StringBuilder();
+            int bodyLength = 0;
+            while (bodyLength < Integer.parseInt(request.getHeaderParameterValue("Content-Length"))) {
+                bodyChar = (char) reader.read();
+                bodyString.append(bodyChar);
+                bodyLength++;
+            }
+            System.out.println();
+            return new ResponseWriter(request, bodyString.toString());
+        }
+        return new ResponseWriter(request);
+    }
+
+    private String getResponseString(ResponseWriter response) {
+        StringBuilder responseString = new StringBuilder();
+        responseString.append("HTTP/1.1 ").append(response.getStatus().getCode()).append(" ")
+                .append(response.getStatus().getDescription()).append("\r\n");
+        if (response.getStatus().getCode() < 300) {
+            response.getCustomHeaders().forEach((key, value) -> responseString.append(key)
+                    .append(": ").append(value).append("\r\n"));
+            responseString.append("\r\n").append(response.getContent());
+        }
+        return responseString.toString();
+    }
+
 
     public static void main(String... args) {
         try {
@@ -73,7 +108,7 @@ public class ConnectionHandler implements Runnable {
                 // As our handling is in a background thread, we can accept new connections on the
                 // main thread (in the next iteration of the loop).
                 // Starting the thread is so-called fire and forget. The main thread starts a second
-                // thread and forgets about its existence. We recieve no feedback on whether the
+                // thread and forgets about its existence. We receive no feedback on whether the
                 // connection was handled gracefully.
                 threadPool.submit(new ConnectionHandler(newConnection));
             }
