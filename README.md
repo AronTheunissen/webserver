@@ -11,7 +11,7 @@ This skeleton project has been set-up using Gradle. As a reminder:
 ./gradlew run
 ```
 
-## Step 1: listening loop
+## What the code does
 
 
-We just made a simple web server that reads an incoming request (as a byte stream). The raw input then gets converted into a high-level class. We've also written a function that translates a high-level response class into the raw HTTP format. There is a wrapper layer around the socket primitives. This is known as a framework - something you can use to build on top of. You can make a whole web application on top of this server without being concerned by the nitty-gritty details.
+A simple web server was made that reads an incoming request as a byte stream. The raw input then gets converted into a high-level class. We've also written a function that translates a high-level response class into the raw HTTP format. There is a wrapper layer around the socket primitives. This is known as a framework - something you can use to build on top of. You can make a whole web application on top of this server without being concerned by the nitty-gritty details.
